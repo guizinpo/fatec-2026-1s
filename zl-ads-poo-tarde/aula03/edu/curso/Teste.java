@@ -1,11 +1,7 @@
 package edu.curso;
-
 public class Teste { 
-
     public static void main(String[] args) {
-
         System.out.println("Incio do codigo");
-
         // inicioCodigo:      
         while(true) {   
             System.out.println("Executando Linha1");
