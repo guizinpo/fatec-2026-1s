@@ -26,7 +26,7 @@ public class Pagamentos {
         // pg.fazerPagamento((float)2800.0, (float)350.0);
         float sal = 2800.0f;
         bene.add("Vale Transporte");
-        pg.fazerPagamento(sal, bene,350.0f);
+        pg.fazerPagamento(sal, bene, 350.0f);
         System.out.println("Salario atual: " + sal);
         System.out.println("Beneficios Atuais:");
         for( String b : bene) { 
