@@ -16,36 +16,20 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.curso.estoque.theme.AppTheme
-
-
-var produtos = mutableListOf<Produto>()
-
-var categoria by mutableStateOf("")
-var sku by mutableStateOf("")
-var nome by mutableStateOf("")
-var descricao by mutableStateOf("")
-var estoqueMinimo : Double? by mutableStateOf(0.0)
-var ativo by mutableStateOf(true)
-var criadoEm by mutableStateOf("")
-var imagem by mutableStateOf("")
 
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class,
         ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
+    val vm = viewModel { GestaoEstoqueViewModel() }
     AppTheme(darkTheme = false) {
         Scaffold(
             topBar = { TopAppBar(title = { Text("Gestão de Produto") },
-                        actions = { IconButton(onClick = {} ) {
+                        actions = { IconButton(onClick = { vm.limparCampos() } ) {
                             Icon(   imageVector = Icons.Outlined.ClearAll,
                                     contentDescription = "Limpar Campos"  )}
                         })
@@ -57,82 +41,48 @@ fun App() {
                     value = "", onValueChange = {},
                     label = { Text("Id:") })
                 TextField(
-                    value = categoria,
-                    onValueChange = { categoria = it },
+                    value = vm.categoria,
+                    onValueChange = { vm.categoria = it },
                     label = { Text("Categoria:") },
                     placeholder = { Text("Categoria do Produto:") })
                 TextField(
-                    value = sku,
-                    onValueChange = { sku = it },
+                    value = vm.sku,
+                    onValueChange = { vm.sku = it },
                     label = { Text("SKU:") },
                     placeholder = { Text("SKU Codigo interno do produto:") })
                 TextField(
-                    value = nome,
-                    onValueChange = { nome = it },
+                    value = vm.nome,
+                    onValueChange = { vm.nome = it },
                     label = { Text("Nome:") },
                     placeholder = { Text("Nome do Produto:") })
                 TextField(
-                    value = descricao ?: "",
-                    onValueChange = { descricao = it },
+                    value = vm.descricao ?: "",
+                    onValueChange = { vm.descricao = it },
                     label = { Text("Descrição:") },
                     placeholder = { Text("Descrição do Produto:") })
                 TextField(
-                    value = estoqueMinimo.toString() ?: "0.0",
-                    onValueChange = { estoqueMinimo = it.toDoubleOrNull() },
+                    value = vm.estoqueMinimo.toString() ?: "0.0",
+                    onValueChange = { vm.estoqueMinimo = it.toDoubleOrNull() },
                     label = { Text("Estoque Minimo:") },
                     placeholder = { Text("Estoque mínimo permitido para este Produto:") })
-                ToggleButton(checked = ativo, onCheckedChange = { ativo = it }) {
+                ToggleButton(checked = vm.ativo, onCheckedChange = { vm.ativo = it }) {
                     Text("Ativo")
                 }
                 TextField(
-                    value = criadoEm,
-                    onValueChange = { criadoEm = it },
+                    value = vm.criadoEm,
+                    onValueChange = { vm.criadoEm = it },
                     label = { Text("Cadastrado em:") },
                     placeholder = { Text("Data de cadastro do Produto:") })
                 TextField(
-                    value = imagem ?: "",
-                    onValueChange = { imagem = it },
+                    value = vm.imagem ?: "",
+                    onValueChange = { vm.imagem = it },
                     label = { Text("Imagem:") },
                     placeholder = { Text("URL da imagem do Produto:") })
                 Row {
-                    Button(onClick = {
-                        val produto = Produto(
-                            id = null,
-                            categoria = categoria,
-                            sku = sku,
-                            nome = nome,
-                            descricao = descricao,
-                            estoqueMinimo = estoqueMinimo,
-                            ativo = ativo,
-                            criadoEm = criadoEm,
-                            imagem = imagem
-                        )
-                        produtos.add(produto)
-                        categoria = ""
-                        sku = ""
-                        nome = ""
-                        descricao = ""
-                        estoqueMinimo = 0.0
-                        ativo = true
-                        criadoEm = ""
-                        imagem = ""
-                    }) {
+                    Button(onClick = { vm.salvar() }) {
                         Text("Salvar")
                     }
-                    Button(onClick = {
-                        for (produto in produtos) {
-                            if (produto.nome.contains(nome, ignoreCase = true)) {
-                                nome = produto.nome
-                                categoria = produto.categoria
-                                sku = produto.sku
-                                descricao = produto.descricao ?: ""
-                                estoqueMinimo = produto.estoqueMinimo ?: 0.0
-                                ativo = produto.ativo
-                                criadoEm = produto.criadoEm
-                                imagem = produto.imagem ?: ""
-                            }
-                        }
-                    }) {
+                    Button(onClick = { vm.pesquisar() }) {
                         Text("Pesquisar")
                     }
                 }
