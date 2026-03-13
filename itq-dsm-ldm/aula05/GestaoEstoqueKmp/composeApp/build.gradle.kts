@@ -46,6 +46,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.androidx.material.icons.extended)
 
+            implementation( libs.bundles.navigation3 )
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -53,6 +54,9 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+        }
+        wasmJsMain.dependencies {
+            implementation( libs.navigation3.browser )
         }
     }
 }

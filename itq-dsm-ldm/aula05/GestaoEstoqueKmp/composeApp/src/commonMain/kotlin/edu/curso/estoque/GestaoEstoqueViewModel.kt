@@ -4,6 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 
 class GestaoEstoqueViewModel : ViewModel() {
     var produtos = mutableListOf<Produto>(
@@ -38,6 +40,8 @@ class GestaoEstoqueViewModel : ViewModel() {
     var ativo by mutableStateOf(true)
     var criadoEm by mutableStateOf("")
     var imagem by mutableStateOf("")
+
+    val backstack = mutableStateOf<NavBackStack<NavKey>>(NavBackStack(Rota.Formulario ))
 
     fun limparCampos() {
         categoria = ""
